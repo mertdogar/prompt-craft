@@ -49,6 +49,25 @@ console.log(doc.render());
 - **Blocks**: `P.heading(level, x)`, `P.paragraph(...parts)`, `P.blockquote(x)`, `P.codeBlock(code, lang)`, `P.horizontalRule()`
 - **Lists**: `P.unorderedList(items, opts)`, `P.orderedList(items, opts)`
 - **Tables**: `P.table(headers, rows, align)`
+- **Conditionals**: `P.If({ condition, then, else })`
+#### Conditional rendering: P.If
+
+Choose between two branches with a boolean or a function predicate. `then` and `else` can be values, `P` nodes, or thunks that return them (evaluated lazily).
+
+```ts
+import { P } from '@mertdogar/prompt-craft';
+
+const doc = P.If({
+  condition: true, // or () => boolean
+  then: P.heading(1, 'Hello'),
+  else: P.heading(2, 'World'),
+});
+
+console.log(doc.render());
+```
+
+If `else` is omitted and the condition is false, it yields empty output.
+
 - **Instance chaining**: `p.append(...)`, `p.bold()`, `p.italic()`, `p.strike()`, `p.codeInline()`, `p.link(href)`, `p.render()`
 
 Notes:
@@ -95,6 +114,7 @@ See files under `examples/`:
 - `template-tag.ts`
 - `table.ts`
 - `extend.ts`
+- `if.ts`
 
 Run all examples:
 

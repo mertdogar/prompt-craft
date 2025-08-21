@@ -256,6 +256,19 @@ export class Prompt implements MDRenderable {
     return new Prompt(new MD(header + "\n" + divider + "\n" + body + "\n\n"));
   }
 
+  // --- Conditionals ---
+
+  static If(opts: {
+    condition: boolean | (() => boolean);
+    then: MDInput | (() => MDInput);
+    else?: MDInput | (() => MDInput);
+  }) {
+    const cond = typeof opts.condition === "function" ? (opts.condition as () => boolean)() : opts.condition;
+    const evalInput = (x: MDInput | (() => MDInput)): MDInput => (typeof x === "function" ? (x as () => MDInput)() : x);
+    const chosen: MDInput = cond ? evalInput(opts.then) : evalInput(opts.else ?? null);
+    return new Prompt(toRenderable(chosen));
+  }
+
   /**
    * Extend with custom static builders. Returns a new class that inherits all
    * existing helpers plus your custom ones.

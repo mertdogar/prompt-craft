@@ -43,6 +43,43 @@ describe('Blocks', () => {
   });
 });
 
+describe('Conditionals', () => {
+  it('If with boolean true chooses then', () => {
+    const md = P.If({
+      condition: true,
+      then: P.heading(1, 'Hello'),
+      else: P.heading(2, 'World')
+    }).render();
+    expect(md).toMatch(/^# Hello\n\n$/);
+  });
+
+  it('If with boolean false chooses else', () => {
+    const md = P.If({
+      condition: false,
+      then: P.heading(1, 'Hello'),
+      else: P.heading(2, 'World')
+    }).render();
+    expect(md).toMatch(/^## World\n\n$/);
+  });
+
+  it('If with function predicate', () => {
+    const md = P.If({
+      condition: () => 2 + 2 === 4,
+      then: () => P.paragraph('OK'),
+      else: () => P.paragraph('NO')
+    }).render();
+    expect(md).toBe('OK\n\n');
+  });
+
+  it('If without else yields empty when false', () => {
+    const md = P.If({
+      condition: () => false,
+      then: P.paragraph('Shown')
+    }).render();
+    expect(md).toBe('');
+  });
+});
+
 describe('Lists', () => {
   it('unordered list basic', () => {
     const md = P.unorderedList(['a', 'b']).render();
