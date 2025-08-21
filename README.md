@@ -33,6 +33,15 @@ const doc = P.heading(2, 'Ticket Summary').append(
 console.log(doc.render());
 ```
 
+#### CommonJS usage
+
+```js
+const { P } = require('prompt-craft');
+
+const doc = P.heading(1, 'Hello').append(' world');
+console.log(doc.render());
+```
+
 ### API overview
 
 - **Creation**: `P.from(x)`, `P.empty()`, `P.concat(...)`, `P.join(items, sep)`, `P.t\`template\``
@@ -106,6 +115,6 @@ Ships with TypeScript types. `P` is an alias for `Prompt`.
 
 ### License
 
-ISC
+GPL-3.0. See `LICENSE`. Repository: https://github.com/mertdogar/prompt-craft
 
 

@@ -5,6 +5,26 @@
   "main": "dist/cjs/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "description": "Tiny, immutable, chainable Markdown builder for LLM prompts.",
+  "keywords": [
+    "markdown",
+    "prompt",
+    "llm",
+    "builder",
+    "typescript",
+    "esm",
+    "commonjs"
+  ],
+  "author": "Mert Doğar",
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mertdogar/prompt-craft.git"
+  },
+  "homepage": "https://github.com/mertdogar/prompt-craft#readme",
+  "bugs": {
+    "url": "https://github.com/mertdogar/prompt-craft/issues"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -23,10 +43,6 @@
     "build": "npm run build:esm && npm run build:cjs && npm run postbuild:cjs",
     "prepublishOnly": "npm run typecheck && npm test && npm run build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "files": [
     "dist",
     "README.md",
