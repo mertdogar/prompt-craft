@@ -5,13 +5,13 @@ Tiny, immutable, chainable Markdown builder for LLM prompts. Compose safe Markdo
 ### Install
 
 ```bash
-npm install prompt-craft
+npm install @mertdogar/prompt-craft
 ```
 
 ### Quick start
 
 ```ts
-import { P } from 'prompt-craft';
+import { P } from '@mertdogar/prompt-craft';
 
 const doc = P.heading(2, 'Ticket Summary').append(
   P.paragraph(
@@ -36,7 +36,7 @@ console.log(doc.render());
 #### CommonJS usage
 
 ```js
-const { P } = require('prompt-craft');
+const { P } = require('@mertdogar/prompt-craft');
 
 const doc = P.heading(1, 'Hello').append(' world');
 console.log(doc.render());
@@ -60,7 +60,7 @@ Notes:
 Create your own helpers with `P.extend(...)`:
 
 ```ts
-import { P } from 'prompt-craft';
+import { P } from '@mertdogar/prompt-craft';
 
 const MyP = P.extend({
   callout(title: any, body: any) {

@@ -1,5 +1,5 @@
 {
-  "name": "prompt-craft",
+  "name": "@mertdogar/prompt-craft",
   "version": "0.1.0",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -24,6 +24,9 @@
   "homepage": "https://github.com/mertdogar/prompt-craft#readme",
   "bugs": {
     "url": "https://github.com/mertdogar/prompt-craft/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "exports": {
     ".": {
