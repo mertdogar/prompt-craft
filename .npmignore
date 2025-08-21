@@ -1,0 +1,30 @@
+# The package is controlled via the "files" field in package.json.
+# This .npmignore is a safeguard if that field changes.
+
+# Source and tests
+src/
+tests/
+examples/
+coverage/
+
+# Build artifacts (keep dist via package.json files whitelist)
+*.tsbuildinfo
+*.map
+
+# Tooling and configs
+.vscode/
+.github/
+.vitest/
+.editorconfig
+.eslint*
+.prettier*
+
+# Misc
+node_modules/
+*.log
+.DS_Store
+*.tgz
+
+# TypeScript configs
+tsconfig.json
+tsconfig.build.json
