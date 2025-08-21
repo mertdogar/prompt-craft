@@ -256,14 +256,21 @@ export class Prompt implements MDRenderable {
     return new Prompt(new MD(header + "\n" + divider + "\n" + body + "\n\n"));
   }
 
+  // --- Collections ---
+
+  static Map<T>(items: T[], map: (item: T, index: number) => MDInput) {
+    const children = (items ?? []).map((it, i) => toRenderable(map(it, i)));
+    return new Prompt(new Group(children));
+  }
+
   // --- Conditionals ---
 
   static If(opts: {
-    condition: boolean | (() => boolean);
+    condition: boolean | undefined | (() => boolean | undefined);
     then: MDInput | (() => MDInput);
     else?: MDInput | (() => MDInput);
   }) {
-    const cond = typeof opts.condition === "function" ? (opts.condition as () => boolean)() : opts.condition;
+    const cond = typeof opts.condition === "function" ? (opts.condition as () => boolean | undefined)() : opts.condition;
     const evalInput = (x: MDInput | (() => MDInput)): MDInput => (typeof x === "function" ? (x as () => MDInput)() : x);
     const chosen: MDInput = cond ? evalInput(opts.then) : evalInput(opts.else ?? null);
     return new Prompt(toRenderable(chosen));

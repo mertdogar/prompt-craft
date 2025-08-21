@@ -50,9 +50,10 @@ console.log(doc.render());
 - **Lists**: `P.unorderedList(items, opts)`, `P.orderedList(items, opts)`
 - **Tables**: `P.table(headers, rows, align)`
 - **Conditionals**: `P.If({ condition, then, else })`
+- **Collections**: `P.Map(items, (item, index) => node)`
 #### Conditional rendering: P.If
 
-Choose between two branches with a boolean or a function predicate. `then` and `else` can be values, `P` nodes, or thunks that return them (evaluated lazily).
+Choose between two branches with a boolean or a function predicate. `undefined` is treated as false. `then` and `else` can be values, `P` nodes, or thunks that return them (evaluated lazily).
 
 ```ts
 import { P } from '@mertdogar/prompt-craft';
@@ -66,7 +67,28 @@ const doc = P.If({
 console.log(doc.render());
 ```
 
-If `else` is omitted and the condition is false, it yields empty output.
+If `else` is omitted and the condition is false (or undefined), it yields empty output.
+
+#### Collections: P.Map
+
+Map arrays into nodes and concatenate them.
+
+```ts
+import { P } from '@mertdogar/prompt-craft';
+
+const array = [
+  { title: 'Hello', description: 'World' },
+  { title: 'Hello', description: 'World' },
+];
+
+const doc = P.Map(array, (item) => P.heading(3, item.title));
+console.log(doc.render());
+// =>
+// ### Hello
+//
+// ### Hello
+//
+```
 
 - **Instance chaining**: `p.append(...)`, `p.bold()`, `p.italic()`, `p.strike()`, `p.codeInline()`, `p.link(href)`, `p.render()`
 
@@ -114,6 +136,7 @@ See files under `examples/`:
 - `template-tag.ts`
 - `table.ts`
 - `extend.ts`
+- `map.ts`
 - `if.ts`
 
 Run all examples:

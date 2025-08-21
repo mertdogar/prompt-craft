@@ -78,6 +78,25 @@ describe('Conditionals', () => {
     }).render();
     expect(md).toBe('');
   });
+
+  it('If with undefined condition treated as false', () => {
+    const md = P.If({
+      // @ts-expect-error testing undefined allowed at runtime
+      condition: undefined as any,
+      then: P.paragraph('Yes'),
+      else: P.paragraph('No'),
+    }).render();
+    expect(md).toBe('No\n\n');
+  });
+
+  it('If with undefined returned from predicate treated as false', () => {
+    const md = P.If({
+      condition: () => undefined,
+      then: P.paragraph('Yes'),
+      else: P.paragraph('No'),
+    }).render();
+    expect(md).toBe('No\n\n');
+  });
 });
 
 describe('Lists', () => {
@@ -89,6 +108,22 @@ describe('Lists', () => {
   it('ordered list with start', () => {
     const md = P.orderedList(['a', 'b'], { start: 3 }).render();
     expect(md.startsWith('3. a')).toBe(true);
+  });
+});
+
+describe('Collections', () => {
+  it('Map maps items to nodes and concatenates', () => {
+    const data = [
+      { title: 'A' },
+      { title: 'B' },
+    ];
+    const md = P.Map(data, (it) => P.heading(3, it.title)).render();
+    expect(md).toBe('### A\n\n### B\n\n');
+  });
+
+  it('Map handles empty arrays', () => {
+    const md = P.Map<any>([], (it) => P.paragraph(String(it))).render();
+    expect(md).toBe('');
   });
 });
 
