@@ -49,25 +49,25 @@ console.log(doc.render());
 - **Blocks**: `P.heading(level, x)`, `P.paragraph(...parts)`, `P.blockquote(x)`, `P.codeBlock(code, lang)`, `P.horizontalRule()`
 - **Lists**: `P.unorderedList(items, opts)`, `P.orderedList(items, opts)`
 - **Tables**: `P.table(headers, rows, align)`
-- **Conditionals**: `P.If({ condition, then, else })`
+- **Conditionals**: `P.If({ condition, whenTrue, whenFalse })`
 - **Collections**: `P.Map(items, (item, index) => node)`
 #### Conditional rendering: P.If
 
-Choose between two branches with a boolean or a function predicate. `undefined` is treated as false. `then` and `else` can be values, `P` nodes, or thunks that return them (evaluated lazily).
+Choose between two branches with a boolean or a function predicate. `undefined` is treated as false. `whenTrue` and `whenFalse` can be values, `P` nodes, or thunks that return them (evaluated lazily). `then`/`else` are still accepted for backward compatibility.
 
 ```ts
 import { P } from '@mertdogar/prompt-craft';
 
 const doc = P.If({
   condition: true, // or () => boolean
-  then: P.heading(1, 'Hello'),
-  else: P.heading(2, 'World'),
+  whenTrue: P.heading(1, 'Hello'),
+  whenFalse: P.heading(2, 'World'),
 });
 
 console.log(doc.render());
 ```
 
-If `else` is omitted and the condition is false (or undefined), it yields empty output.
+If `whenFalse`/`else` is omitted and the condition is false (or undefined), it yields empty output.
 
 #### Collections: P.Map
 

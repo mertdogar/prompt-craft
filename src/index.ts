@@ -267,12 +267,17 @@ export class Prompt implements MDRenderable {
 
   static If(opts: {
     condition: boolean | undefined | (() => boolean | undefined);
-    then: MDInput | (() => MDInput);
+    whenTrue?: MDInput | (() => MDInput);
+    whenFalse?: MDInput | (() => MDInput);
+    // Back-compat aliases (deprecated)
+    then?: MDInput | (() => MDInput);
     else?: MDInput | (() => MDInput);
   }) {
     const cond = typeof opts.condition === "function" ? (opts.condition as () => boolean | undefined)() : opts.condition;
-    const evalInput = (x: MDInput | (() => MDInput)): MDInput => (typeof x === "function" ? (x as () => MDInput)() : x);
-    const chosen: MDInput = cond ? evalInput(opts.then) : evalInput(opts.else ?? null);
+    const evalInput = (x: MDInput | (() => MDInput) | undefined): MDInput => (typeof x === "function" ? (x as () => MDInput)() : (x as MDInput));
+    const truthy = opts.whenTrue ?? opts.then;
+    const falsy = opts.whenFalse ?? opts.else;
+    const chosen: MDInput = cond ? evalInput(truthy ?? null) : evalInput(falsy ?? null);
     return new Prompt(toRenderable(chosen));
   }
 

@@ -47,8 +47,8 @@ describe('Conditionals', () => {
   it('If with boolean true chooses then', () => {
     const md = P.If({
       condition: true,
-      then: P.heading(1, 'Hello'),
-      else: P.heading(2, 'World')
+      whenTrue: P.heading(1, 'Hello'),
+      whenFalse: P.heading(2, 'World')
     }).render();
     expect(md).toMatch(/^# Hello\n\n$/);
   });
@@ -56,8 +56,8 @@ describe('Conditionals', () => {
   it('If with boolean false chooses else', () => {
     const md = P.If({
       condition: false,
-      then: P.heading(1, 'Hello'),
-      else: P.heading(2, 'World')
+      whenTrue: P.heading(1, 'Hello'),
+      whenFalse: P.heading(2, 'World')
     }).render();
     expect(md).toMatch(/^## World\n\n$/);
   });
@@ -65,8 +65,8 @@ describe('Conditionals', () => {
   it('If with function predicate', () => {
     const md = P.If({
       condition: () => 2 + 2 === 4,
-      then: () => P.paragraph('OK'),
-      else: () => P.paragraph('NO')
+      whenTrue: () => P.paragraph('OK'),
+      whenFalse: () => P.paragraph('NO')
     }).render();
     expect(md).toBe('OK\n\n');
   });
@@ -74,7 +74,7 @@ describe('Conditionals', () => {
   it('If without else yields empty when false', () => {
     const md = P.If({
       condition: () => false,
-      then: P.paragraph('Shown')
+      whenTrue: P.paragraph('Shown')
     }).render();
     expect(md).toBe('');
   });
@@ -82,8 +82,8 @@ describe('Conditionals', () => {
   it('If with undefined condition treated as false', () => {
     const md = P.If({
       condition: undefined,
-      then: P.paragraph('Yes'),
-      else: P.paragraph('No'),
+      whenTrue: P.paragraph('Yes'),
+      whenFalse: P.paragraph('No'),
     }).render();
     expect(md).toBe('No\n\n');
   });
@@ -91,8 +91,8 @@ describe('Conditionals', () => {
   it('If with undefined returned from predicate treated as false', () => {
     const md = P.If({
       condition: () => undefined,
-      then: P.paragraph('Yes'),
-      else: P.paragraph('No'),
+      whenTrue: P.paragraph('Yes'),
+      whenFalse: P.paragraph('No'),
     }).render();
     expect(md).toBe('No\n\n');
   });
