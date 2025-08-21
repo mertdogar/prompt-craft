@@ -81,8 +81,7 @@ describe('Conditionals', () => {
 
   it('If with undefined condition treated as false', () => {
     const md = P.If({
-      // @ts-expect-error testing undefined allowed at runtime
-      condition: undefined as any,
+      condition: undefined,
       then: P.paragraph('Yes'),
       else: P.paragraph('No'),
     }).render();
