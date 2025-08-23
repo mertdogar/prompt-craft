@@ -49,7 +49,7 @@ console.log(doc.render());
 - **Blocks**: `P.heading(level, x)`, `P.paragraph(...parts)`, `P.blockquote(x)`, `P.codeBlock(code, lang)`, `P.horizontalRule()`
 - **Lists**: `P.unorderedList(items, opts)`, `P.orderedList(items, opts)`
 - **Tables**: `P.table(headers, rows, align)`
-- **Conditionals**: `P.If({ condition, whenTrue, whenFalse })`
+- **Conditionals**: `P.If({ condition, whenTrue, whenFalse })`, `P.Switch(value, branches)`
 - **Collections**: `P.Map(items, (item, index) => node)`
 #### Conditional rendering: P.If
 
@@ -68,6 +68,43 @@ console.log(doc.render());
 ```
 
 If `whenFalse`/`else` is omitted and the condition is false (or undefined), it yields empty output.
+
+#### Switch statements: P.Switch
+
+Choose between multiple branches based on a value. Returns the first matching case's content, or empty output if none match.
+
+```ts
+import { P } from '@mertdogar/prompt-craft';
+
+const userType = 'admin';
+
+const doc = P.Switch(userType, [
+  { case: 'admin', content: P.heading(2, 'Admin Dashboard') },
+  { case: 'user', content: P.heading(2, 'User Profile') },
+  { case: 'guest', content: P.heading(2, 'Welcome') },
+]);
+
+console.log(doc.render());
+// => ## Admin Dashboard
+```
+
+You can also use function predicates for more complex matching:
+
+```ts
+const score = 85;
+
+const doc = P.Switch(score, [
+  { case: (n: number) => n >= 90, content: P.paragraph('Grade: A') },
+  { case: (n: number) => n >= 80, content: P.paragraph('Grade: B') },
+  { case: (n: number) => n >= 70, content: P.paragraph('Grade: C') },
+  { case: (n: number) => n >= 60, content: P.paragraph('Grade: D') },
+]);
+
+console.log(doc.render());
+// => Grade: B
+```
+
+Content can be values, `P` nodes, or lazy functions that return them (evaluated only when matched).
 
 #### Collections: P.Map
 
@@ -138,6 +175,7 @@ See files under `examples/`:
 - `extend.ts`
 - `map.ts`
 - `if.ts`
+- `switch.ts`
 
 Run all examples:
 

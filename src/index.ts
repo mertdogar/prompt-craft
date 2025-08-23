@@ -282,6 +282,30 @@ export class Prompt implements MDRenderable {
   }
 
   /**
+   * Switch between multiple branches based on a value. Returns the first
+   * matching case's content, or empty output if none match.
+   *
+   * Usage:
+   *   P.Switch(value, [
+   *     { case: 'a', content: P.paragraph('A') },
+   *     { case: 'b', content: P.paragraph('B') },
+   *   ])
+   */
+  static Switch<T>(
+    value: T,
+    branches: Array<{ case: T | ((v: T) => boolean); content: MDInput | (() => MDInput) }>
+  ) {
+    const evalInput = (x: MDInput | (() => MDInput) | undefined): MDInput => (typeof x === "function" ? (x as () => MDInput)() : (x as MDInput));
+
+    const match = (branches ?? []).find(b =>
+      typeof b.case === "function" ? (b.case as (v: T) => boolean)(value) : (b.case as any) === (value as any)
+    );
+
+    const chosen: MDInput = match ? evalInput(match.content) : null;
+    return new Prompt(toRenderable(chosen));
+  }
+
+  /**
    * Extend with custom static builders. Returns a new class that inherits all
    * existing helpers plus your custom ones.
    *
@@ -328,6 +352,14 @@ export class Prompt implements MDRenderable {
   codeInline(): Prompt { return Prompt.codeInline(this); }
 
   link(href: string): Prompt { return Prompt.link(this, href); }
+
+  if(condition: boolean | undefined | (() => boolean | undefined)): Prompt {
+    const cond = typeof condition === "function" ? (condition as () => boolean | undefined)() : condition;
+    const evalInput = (x: MDInput | (() => MDInput) | undefined): MDInput => (typeof x === "function" ? (x as () => MDInput)() : (x as MDInput));
+
+    const chosen: MDInput = cond ? evalInput(this) : evalInput(null);
+    return new Prompt(toRenderable(chosen));
+  }
 
   // Render
   render(): string { return this.node.render(); }

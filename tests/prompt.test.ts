@@ -98,6 +98,76 @@ describe('Conditionals', () => {
   });
 });
 
+describe('Switch', () => {
+  it('matches exact case and renders content', () => {
+    const md = P.Switch('option1', [
+      { case: 'option1', content: P.paragraph('Hello 1') },
+      { case: 'option2', content: P.paragraph('Hello 2') },
+    ]).render();
+    expect(md).toBe('Hello 1\n\n');
+  });
+
+  it('matches second case when first does not match', () => {
+    const md = P.Switch('option2', [
+      { case: 'option1', content: P.paragraph('Hello 1') },
+      { case: 'option2', content: P.paragraph('Hello 2') },
+    ]).render();
+    expect(md).toBe('Hello 2\n\n');
+  });
+
+  it('returns empty when no cases match', () => {
+    const md = P.Switch('option3', [
+      { case: 'option1', content: P.paragraph('Hello 1') },
+      { case: 'option2', content: P.paragraph('Hello 2') },
+    ]).render();
+    expect(md).toBe('');
+  });
+
+  it('works with function predicates', () => {
+    const md = P.Switch(42, [
+      { case: (n: number) => n < 10, content: P.paragraph('Small') },
+      { case: (n: number) => n >= 10 && n < 100, content: P.paragraph('Medium') },
+      { case: (n: number) => n >= 100, content: P.paragraph('Large') },
+    ]).render();
+    expect(md).toBe('Medium\n\n');
+  });
+
+  it('supports lazy content evaluation with functions', () => {
+    const md = P.Switch('test', [
+      { case: 'test', content: () => P.heading(2, 'Lazy Title') },
+      { case: 'other', content: () => P.paragraph('Not shown') },
+    ]).render();
+    expect(md).toBe('## Lazy Title\n\n');
+  });
+
+  it('matches first case when multiple cases could match', () => {
+    const md = P.Switch('match', [
+      { case: 'match', content: P.paragraph('First') },
+      { case: 'match', content: P.paragraph('Second') },
+    ]).render();
+    expect(md).toBe('First\n\n');
+  });
+
+  it('handles empty branches array', () => {
+    const md = P.Switch('anything', []).render();
+    expect(md).toBe('');
+  });
+
+  it('works with different value types', () => {
+    const md1 = P.Switch(123, [
+      { case: 123, content: P.paragraph('Number match') },
+      { case: 456, content: P.paragraph('Other number') },
+    ]).render();
+    expect(md1).toBe('Number match\n\n');
+
+    const md2 = P.Switch('123', [
+      { case: '123', content: P.paragraph('String match') },
+      { case: '456', content: P.paragraph('Other string') },
+    ]).render();
+    expect(md2).toBe('String match\n\n');
+  });
+});
+
 describe('Lists', () => {
   it('unordered list basic', () => {
     const md = P.unorderedList(['a', 'b']).render();
@@ -130,6 +200,33 @@ describe('Instance chaining', () => {
   it('append and chain formatting', () => {
     const out = P.text('hello').append(P.space(), 'world').bold().render();
     expect(out).toBe('**hello world**');
+  });
+});
+
+describe('Instance conditionals', () => {
+  it('if(true) keeps content', () => {
+    const md = P.heading(3, 'Shown').if(true).render();
+    expect(md).toBe('### Shown\n\n');
+  });
+
+  it('if(false) drops content', () => {
+    const md = P.heading(3, 'Hidden').if(false).render();
+    expect(md).toBe('');
+  });
+
+  it('if(() => true) keeps content', () => {
+    const md = P.paragraph('OK').if(() => true).render();
+    expect(md).toBe('OK\n\n');
+  });
+
+  it('if(() => undefined) treated as false', () => {
+    const md = P.paragraph('Nope').if(() => undefined).render();
+    expect(md).toBe('');
+  });
+
+  it('works in a chain', () => {
+    const md = P.text('hey').bold().if(true).render();
+    expect(md).toBe('**hey**');
   });
 });
 

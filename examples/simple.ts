@@ -12,6 +12,13 @@ const doc =
         { content: "Only happens with campaign code", children: [
           "Code applied via query param",
           "Not reproducible with manual input",
+          {content: "test", children: [
+            "test",
+            "test",
+            "test",
+            "test",
+            "test",
+          ]},
           P.bold("Tested on: ").append("iOS 18 / Safari")
         ]},
         "No errors in Sentry",
