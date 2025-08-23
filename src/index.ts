@@ -79,11 +79,21 @@ function renderList(
     let index = startNum;
     for (const node of nodes) {
       const { content, children } = normalizeListItem(node);
+
+      // Skip items that would render as empty strings
+      const rendered = toRenderable(content).render();
+      if (rendered.trim() === "") {
+        // Still process children if they exist, but don't create a list item for empty content
+        if (children && children.length) {
+          walk(children, level, index); // Keep same level since we're not creating a parent item
+        }
+        continue;
+      }
+
       const pad = " ".repeat(level * indent);
       const marker = ordered ? `${index}.` : bullet;
 
       // Render content; allow multi-line by indenting subsequent lines
-      const rendered = toRenderable(content).render();
       const [first, ...rest] = rendered.split("\n");
       lines.push(`${pad}${marker} ${first}`);
       for (const r of rest) {

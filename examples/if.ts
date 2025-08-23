@@ -8,6 +8,19 @@ const doc = P.concat(
     whenFalse: P.heading(3, "World"),
   }),
   P.If({
+    condition: () => 1 + 1 === 3,
+    whenTrue: () => P.paragraph("What"),
+  }),
+  P.unorderedList([
+    P.raw("test"),
+    P.raw("test"),
+    P.If({
+      condition: () => 1 + 1 === 3,
+      whenTrue: () => P.paragraph("What"),
+    }),
+    P.raw("test"),
+  ]),
+  P.If({
     condition: false,
     whenTrue: P.paragraph("This will not show"),
     whenFalse: P.paragraph("Else branch when false"),
